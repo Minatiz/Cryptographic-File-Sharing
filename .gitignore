@@ -1,0 +1,5 @@
+__pycache__/
+*.py[cod]
+
+Received_plaintext.bin
+server_file.bin
