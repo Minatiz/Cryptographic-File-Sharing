@@ -17,7 +17,7 @@ class Server:
         # Server private and public key
         s_private_key, s_public_key = generating_RSA_keys()
 
-        # Generating randoms bytes to use as password for serialzing private key. Private key won't be send only used local!
+        # Generating randoms bytes to use as password for serializing private key. Private key won't be send only used local!
         password = generating_random_secure_bytes()
 
         # Serializing the private key for secure mechanism to store it with hidden password.
@@ -47,17 +47,16 @@ class Server:
 
                         # AES key. used for encrypt and decrypt files.
                         aes_key = generating_AES_key()
-                        print(f"AES key generated:{aes_key}\n")
+                        # print(f"AES key generated:{aes_key}\n") # Secret no output to terminal!
 
                         # Encrypting the AES key with client public key.
-                        # Then sending it to client. Before sending i send signature first. Step 5
+                        # Then sending it to client. Before sending it first send signature Step 5
                         encrypted_aes_key = encrypt_with_rsa(
                             deserialize_public_key(client_public_key), aes_key)
                         print(f"Encrypted aes key:{encrypted_aes_key}\n")
 
-                        # Signing the encrypted AES key with server private key and send to client.
-                        # Client can verify it with server public key.
-
+                        # Signed the encrypted AES key with server private key and send to client.
+                        # Client can verify the sign with server public key.
                         signature_AES = sign_message(
                             deserialize_private_key(
                                 serialized_private_key, password), encrypted_aes_key)
@@ -71,17 +70,15 @@ class Server:
                         ciphertext = encrypt_with_aes(aes_key, self.file_data)
                         print(f"Ciphertext sent to client: {ciphertext}\n")
 
-                        # Signing the ciphertext with server private key to send to client.
-                        # client can verify it with server public key.
+                        # Signed the ciphertext with server private key to send to client.
+                        # Client can verify the sign with server public key. And sending the encrypted cipher text. Step 7
                         signature_ciphertext = sign_message(
                             deserialize_private_key(
                                 serialized_private_key, password), ciphertext)
                         print(
                             f"Signed ciphertext sent to client: {signature_ciphertext}\n")
-
                         client_socket.sendall(signature_ciphertext)
-
-                        # Sending the encrypted binary file to client. Step 7
+                        # Sending the encrypted binary file to client.
                         client_socket.sendall(ciphertext)
 
                         client_socket.close()
@@ -94,7 +91,7 @@ class Server:
 
 def main():
     # Generates a server_file.bin
-    generate_random_binary_file(10)
+    generate_random_binary_file(20)
 
     if len(sys.argv) != 3:
         print("To start server type: python3 server.py 'filename or pathname' 'port number (above 1024)'")

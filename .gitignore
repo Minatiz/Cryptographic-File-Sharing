@@ -1,5 +1,6 @@
 __pycache__/
 *.py[cod]
 
-Received_plaintext.bin
+received_plaintext.bin
 server_file.bin
+capture.pcap

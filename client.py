@@ -30,7 +30,6 @@ class Client:
             # Received signature of AES key and encrypted AES key. Step 6
             signature_aes = client_socket.recv(256)
             print(f"Received signature AES from server:{signature_aes}\n")
-
             # Receiving the encrypted AES key from server.
             encrypted_aes_key = client_socket.recv(256)
             print(
@@ -44,7 +43,7 @@ class Client:
             # Decrypting the AES key with client private key. Now we have a symmetric key to decrypt ciper text
             aes_key = decrypt_with_rsa(deserialize_private_key(
                 serialized_private_key, password), encrypted_aes_key)
-            print(f"AES key decrypted:{aes_key}\n")
+            # print(f"AES key decrypted:{aes_key}\n") # Secret no output to terminal!
 
             # Receiving signed cipher text and the cipher text from server. Step 8
             signature_ciphertext = client_socket.recv(256)
@@ -65,7 +64,7 @@ class Client:
                 f"SIGNATURE PLAINTEXT VERIFIED:{signature_plaintext_verify}\n")
 
             # "Download" the plaintext file.
-            received_plaintext_name = "Received_plaintext.bin"
+            received_plaintext_name = "received_plaintext.bin"
             with open(received_plaintext_name, 'wb') as file:
                 file.write(plaintext)
                 print(f"Downloaded: {received_plaintext_name}")
