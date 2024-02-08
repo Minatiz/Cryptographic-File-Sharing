@@ -57,21 +57,27 @@ def deserialize_public_key(public_key):
     return serialization.load_pem_public_key(public_key)
 
 
-def serialize_private_key(private_key):
+def serialize_private_key(private_key, password_in_bytes):
     # Same as how public just here private bytes and for private key
     return private_key.private_bytes(
         encoding=serialization.Encoding.PEM,
         format=serialization.PrivateFormat.PKCS8,
-        encryption_algorithm=serialization.NoEncryption()
+        encryption_algorithm=serialization.BestAvailableEncryption(
+            password=password_in_bytes)
     )
 
 
-def deserialize_private_key(private_key):
-    return serialization.load_pem_private_key(private_key)
+def deserialize_private_key(private_key, password_in_bytes):
+    return serialization.load_pem_private_key(private_key, password=password_in_bytes)
 
 
 def generating_AES_key():
     return secrets.token_bytes(32)  # 32 bytes, 256 bits length key
+
+
+# Used for generating random password for serializing private keys
+def generating_random_secure_bytes():
+    return secrets.token_bytes(16)
 
 
 def encrypt_with_aes(key, data):

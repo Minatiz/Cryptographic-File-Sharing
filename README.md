@@ -2,8 +2,8 @@
 
 # How to run server
 
-When running server it creates a binary file called file.bin in same folder directory.
-Running the server: python3 server.py file.bin "port number"
+When running server it creates a binary file called server_file.bin in same folder directory.
+Running the server: python3 server.py server_file.bin "port number"
 Remember to use port number between 1024-49151
 
 # How to run client
