@@ -1,6 +1,7 @@
 import socket
 import sys
 from tools import *
+import cProfile
 
 remove_list = ["Received_plaintext.bin"]
 
@@ -82,8 +83,12 @@ def main():
     server_address = sys.argv[1]
     port = int(sys.argv[2])
 
+    # pr = cProfile.Profile()
+    # pr.enable()
     client = Client(server_address, port)
     client.client_download_file()
+    # pr.disable()
+    # pr.print_stats()
 
     sys.exit(0)
 
